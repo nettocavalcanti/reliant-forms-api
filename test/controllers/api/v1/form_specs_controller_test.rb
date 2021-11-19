@@ -35,4 +35,9 @@ class Api::V1::FormSpecsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 204
   end
+
+  test "should not found with invalid form_id" do
+    get "/api/v1/forms/#{-1}/form_specs", as: :json
+    assert_response :not_found
+  end
 end

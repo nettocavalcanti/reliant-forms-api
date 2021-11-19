@@ -1,9 +1,10 @@
 class Api::V1::FormSpecsController < ApplicationController
   before_action :set_form_spec, only: [:show, :update, :destroy]
+  before_action :check_form
 
   # GET /form_specs
   def index
-    @form_specs = FormSpec.all
+    @form_specs = FormSpec.where(:form_id => params[:form_id]).paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC')
 
     render json: @form_specs
   end
@@ -47,5 +48,11 @@ class Api::V1::FormSpecsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def form_spec_params
       params.require(:form_spec).permit(:form_id, :content)
+    end
+
+    # Check if params exist
+    def check_form
+      params.require(:form_id).inspect
+      Form.find(params[:form_id])
     end
 end

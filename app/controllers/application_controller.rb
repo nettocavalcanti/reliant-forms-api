@@ -26,4 +26,11 @@ class ApplicationController < ActionController::API
         response = { errors: [error] }
         render json: response, status: :conflict
     end
+
+    rescue_from(ActiveRecord::RecordNotFound) do |error_message|
+        error = {}
+        error["message"] = [error_message]
+        response = { errors: [error] }
+        render json: response, status: :not_found
+    end
 end
