@@ -16,10 +16,10 @@ class Api::V1::FormsController < ApplicationController
   # POST /forms
   def create
     form_params
-    form_values = FormValueParseService.parse_values(params[:form][:full_form_content])
+    form_specs = FormSpecParseService.parse_specs(params[:form][:full_form_content])
     @form = Form.new(:name => params[:form][:name])
 
-    if @form.save and save_form_values(@form, form_values)
+    if @form.save and save_form_specs(@form, form_specs)
       render json: @form, status: :created
     else
       render json: @form.errors, status: :unprocessable_entity
@@ -58,9 +58,9 @@ class Api::V1::FormsController < ApplicationController
       params.require(:form).require(:name).inspect
     end
 
-    def save_form_values(form, form_values)
-      form_values.each do |form_value|
-        FormValue.create(:form_id => form.id, :content => form_value)
+    def save_form_specs(form, form_specs)
+      form_specs.each do |form_spec|
+        FormSpec.create(:form_id => form.id, :content => form_spec)
       end
     end
 end

@@ -12,12 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2021_11_18_223235) do
 
-  create_table "form_values", force: :cascade do |t|
+  create_table "form_specs", force: :cascade do |t|
     t.integer "form_id", null: false
     t.json "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["form_id"], name: "index_form_values_on_form_id"
+    t.index ["form_id"], name: "index_form_specs_on_form_id"
   end
 
   create_table "forms", force: :cascade do |t|
@@ -27,5 +27,5 @@ ActiveRecord::Schema.define(version: 2021_11_18_223235) do
     t.index ["name"], name: "index_forms_on_name", unique: true
   end
 
-  add_foreign_key "form_values", "forms"
+  add_foreign_key "form_specs", "forms"
 end

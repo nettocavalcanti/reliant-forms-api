@@ -1,3 +1,3 @@
 class Form < ApplicationRecord
-    has_many :form_values, dependent: :destroy
+    has_many :form_specs, dependent: :destroy
 end

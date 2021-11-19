@@ -13,7 +13,7 @@ class ApplicationController < ActionController::API
         render json: response, status: :bad_request
     end
 
-    rescue_from(FormValueParseService::InvalidFormValueError) do |format_error|
+    rescue_from(FormSpecParseService::InvalidFormSpecError) do |format_error|
         error = {}
         error["message"] = [format_error]
         response = { errors: [error] }
