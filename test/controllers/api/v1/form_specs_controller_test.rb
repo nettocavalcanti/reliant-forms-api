@@ -12,7 +12,7 @@ class Api::V1::FormSpecsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create form_spec" do
     assert_difference('FormSpec.count') do
-      post "/api/v1/forms/#{@form_spec.form_id}/form_specs", params: { form_spec: { content: @form_spec.content, form_id: @form_spec.form_id } }, as: :json
+      post "/api/v1/forms/#{@form_spec.form_id}/form_specs", params: { form_spec: { content: "{\"key\":{\"type\":\"text\",\"mutable\":false,\"default\":\"static_key\"},\"value\":{\"type\":\"text\",\"mutable\":true}}" } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class Api::V1::FormSpecsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update form_spec" do
-    patch "/api/v1/forms/#{@form_spec.form_id}/form_specs/#{@form_spec.id}", params: { form_spec: { content: @form_spec.content, form_id: @form_spec.form_id } }, as: :json
+    patch "/api/v1/forms/#{@form_spec.form_id}/form_specs/#{@form_spec.id}", params: { form_spec: { content: "{\"key\":{\"type\":\"text\",\"mutable\":false,\"default\":\"static_key\"},\"value\":{\"type\":\"text\",\"mutable\":true}}" } }, as: :json
     assert_response 200
   end
 

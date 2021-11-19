@@ -2,10 +2,8 @@
 
 one:
   form: one
-  content: MyText
   form_id: 1
 
 two:
   form: two
-  content: MyText
   form_id: 2
