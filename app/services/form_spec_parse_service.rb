@@ -3,6 +3,8 @@ require "json-schema"
 class FormSpecParseService
     class InvalidFormSpecError < StandardError; end
 
+    MAX_CHILDREN_ALLOWED = 3
+
     EntryDefinition = {
         "type" => "object",
         "required" => ["type"],
@@ -25,7 +27,7 @@ class FormSpecParseService
 
     def self.parse_spec(form_spec)
         form_spec = JSON.parse(form_spec) if form_spec.is_a?(String)
-        validate_form_spec(form_spec)
+        validate_form_spec(form_spec, 1)
     end
 
     def self.parse_specs(form_specs)
@@ -41,7 +43,7 @@ class FormSpecParseService
 
     private
 
-    def self.validate_form_spec(form_spec)
+    def self.validate_form_spec(form_spec, level)
         # Parse Schema compliance
         raise InvalidFormSpecError.new("FormSpec must be an object but found '#{form_spec}'") unless form_spec.is_a?(Object)
         raise InvalidFormSpecError.new("FormSpec not fulfill the specifications") unless JSON::Validator.validate(KeyValuePairDefinition, form_spec)
@@ -61,7 +63,7 @@ class FormSpecParseService
         check_key_mutable_as_child(form_spec)
 
         # Perform the same validations in children node
-        validate_children(form_spec["key"])
+        validate_children(form_spec, level)
     end
 
     def self.check_key_mutable_as_child(form_spec)
@@ -82,10 +84,11 @@ class FormSpecParseService
         raise InvalidFormSpecError.new("Inconsistent values for entries mutable and default inside #{key.capitalize} object") if (form_spec[key]["mutable"] == false and form_spec[key]["default"].blank?)
     end
 
-    def self.validate_children(form_spec)
-        if form_spec.keys().include?(:children)
-            form_spec[:children].each do |child|
-                validate_form_spec(child)
+    def self.validate_children(form_spec, level)
+        raise InvalidFormSpecError.new("Too many nested children, max allowed: 3") if level > MAX_CHILDREN_ALLOWED
+        if form_spec.keys().include?("children")
+            form_spec["children"].each do |child|
+                validate_form_spec(child, level + 1)
             end
         end
     end
