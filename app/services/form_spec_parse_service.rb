@@ -4,7 +4,7 @@ class FormSpecParseService
     class InvalidFormSpecError < StandardError; end
 
     MAX_CHILDREN_ALLOWED = 3
-    CHILDREN_STARTING_LEVEL = 1
+    CHILDREN_STARTING_LEVEL = 0
 
     EntryDefinition = {
         "type" => "object",
