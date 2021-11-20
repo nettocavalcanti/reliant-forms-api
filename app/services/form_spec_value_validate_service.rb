@@ -1,4 +1,5 @@
 ALLOW_INPUT_TEXT = "<ALLOWED_INPUT>"
+NOT_ALLOW_INPUT_TEXT = "NOT_ALLOWED_INPUT"
 
 module Enumerable
     def flatten_with_path(parent_prefix = nil)
@@ -17,7 +18,11 @@ module Enumerable
                 res[key] = ALLOW_INPUT_TEXT
                 res.merge!(v.flatten_with_path(key)) # recursive call to flatten child elements
             else
-                res[key] = ALLOW_INPUT_TEXT
+                if v.starts_with?("<")
+                    res[key] = ALLOW_INPUT_TEXT
+                else
+                    res[key] = NOT_ALLOW_INPUT_TEXT
+                end
             end
         end
   
@@ -36,7 +41,7 @@ class FormSpecValueValidateService
 
     def self.validate_key(form_spec, key)
         form_spec.deep_stringify_keys!
-        raise InvalidFormSpecValueError.new("Value not allowed in this field") unless form_spec.flatten_with_path.keys().include?(key)
+        raise InvalidFormSpecValueError.new("Value not allowed in this field") unless form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.include?(key)
     end
 
     private

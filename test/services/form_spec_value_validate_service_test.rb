@@ -37,4 +37,29 @@ class FormSpecValueValidateServiceTest < ActiveSupport::TestCase
             "15"
         )
     end
+
+    test "should allow to save value for existent key on spec" do
+        FormSpecValueValidateService::validate_key(
+            {"<environment_1>": {"database": "<database>", "username": "<username>"}},
+            "<environment_1>"
+        )
+    end
+
+    test "should allow to save inner value for existent key on spec" do
+        FormSpecValueValidateService::validate_key(
+            {"<environment_1>": {"database": "<database>", "username": "<username>"}},
+            "<environment_1>/username"
+        )
+    end
+
+    test "should not allow to save inner value for existent key on spec" do
+        exception = assert_raises(FormSpecValueValidateService::InvalidFormSpecValueError) {
+            FormSpecValueValidateService::validate_key(
+                {"<environment_1>": {"database": "database", "username": "<username>"}},
+                "<environment_1>/database"
+            )
+        }
+
+        assert_equal( "Value not allowed in this field", exception.message )
+    end
 end
