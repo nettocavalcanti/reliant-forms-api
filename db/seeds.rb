@@ -16,12 +16,12 @@ end
     {
         form_id: Form.first.id,
         spec: {"key":{"type":"text","mutable":false,"default":"static_key"},"value":{"type":"text","mutable":true}},
-        parsed_spec: {"static_key": "<value>"}
+        parsed_spec: {"static_key": "<value:integer>"}
     },
     {
         form_id: Form.second.id,
         spec: {"key":{"type":"text","mutable":true,"multiple":true,"default":"environment_1"},"value":{"type":"child"},"children":[{"key":{"type":"text","mutable":false,"default":"database"},"value":{"type":"text","mutable":true}},{"key":{"type":"text","mutable":false,"default":"username"},"value":{"type":"text","mutable":true}}]},
-        parsed_spec: {"<environment_1>": {"database": "<database>", "username": "<username>"}}
+        parsed_spec: {"<environment_1:text>": {"database": "<database:text>", "username": "<username:text>"}}
     },
 ].each do |form_spec|
     FormSpec.find_or_create_by({form_id: form_spec[:form_id], spec: form_spec[:spec], parsed_spec: form_spec[:parsed_spec]})

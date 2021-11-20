@@ -35,16 +35,29 @@ class FormSpecValueValidateService
 
     def self.validate(form_spec, parsed_spec, value, key)
         form_spec.deep_stringify_keys!
-        validate_key(parsed_spec, key)
+        validate_key(parsed_spec, key, value)
         raise InvalidFormSpecValueError.new("Value must be an integer") if (form_spec["value"]["type"] == "integer") and (!is_number?(value))
         raise InvalidFormSpecValueError.new("Field is not mutable") if form_spec["value"]["mutable"] == false
     end
 
     private
 
-    def self.validate_key(form_spec, key)
+    def self.validate_key(form_spec, key, value)
         form_spec.deep_stringify_keys!
-        raise InvalidFormSpecValueError.new("Value not allowed in this field") unless form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.include?(key)
+        found_key = false
+
+        # Validate if the value is allowed into key spec
+        form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.each do |spec_key|
+            if spec_key.gsub(":text", "").gsub(":integer", "") == key
+                spec_type = spec_key.tr("<>", "").split(":")[1]
+                found_key = true
+                raise InvalidFormSpecValueError.new("Value must be an integer") if (spec_type == "integer") and !is_number?(value)
+                break
+            end
+        end
+
+        # If key not found on spec
+        raise InvalidFormSpecValueError.new("Value not allowed in this field") unless found_key
     end
 
     private

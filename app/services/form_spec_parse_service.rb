@@ -113,8 +113,7 @@ class FormSpecParseService
         end
 
         if form_spec["value"]["type"] != "child"
-            parsed_spec[last_key] = "<#{form_spec["key"]["default"]}>"
-            #parsed_spec[last_key]["json"] = form_spec["value"]
+            parsed_spec[last_key] = "<#{form_spec["key"]["default"]}:#{form_spec["value"]["type"]}>"
         end
 
         return last_key
