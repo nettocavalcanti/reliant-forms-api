@@ -17,8 +17,12 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # POST /forms/#{form_id}/specs/#{form_spec_id}/values
   def create
     form_spec_value_params
-    FormSpecValueValidateService::validate_key(@form_spec.parsed_spec, params[:form_spec_value][:key])
-    FormSpecValueValidateService::validate(@form_spec.spec, params[:form_spec_value][:value])
+    FormSpecValueValidateService::validate(
+      @form_spec.spec,
+      @form_spec.parsed_spec,
+      params[:form_spec_value][:value],
+      params[:form_spec_value][:key]
+    )
     @form_spec_value = FormSpecValue.new(:form_spec_id => params[:form_spec_id], :value => params[:form_spec_value][:value], :key => params[:form_spec_value][:key])
 
     if @form_spec_value.save
@@ -31,8 +35,12 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # PATCH/PUT /forms/#{form_id}/specs/#{form_spec_id}/values/1
   def update
     form_spec_value_params
-    FormSpecValueValidateService::validate_key(@form_spec.parsed_spec, params[:form_spec_value][:key])
-    FormSpecValueValidateService::validate(@form_spec.spec, params[:form_spec_value][:value])
+    FormSpecValueValidateService::validate(
+      @form_spec.spec,
+      @form_spec.parsed_spec,
+      params[:form_spec_value][:value],
+      params[:form_spec_value][:key]
+    )
     if @form_spec_value.update(:value => params[:form_spec_value][:value])
       render json: @form_spec_value
     else
