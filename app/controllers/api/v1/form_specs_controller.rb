@@ -17,9 +17,9 @@ class Api::V1::FormSpecsController < ApplicationController
   # POST /forms/#{form_id}/specs
   def create
     form_spec_params
-    form_parsed_spec = {}
-    content = FormSpecParseService.parse_spec(params[:form_spec][:content], form_parsed_spec)
-    @form_spec = FormSpec.new(:form_id => params[:form_id], :content => content)
+    parsed_form_spec = {}
+    form_spec = FormSpecParseService.parse_spec(params[:form_spec][:spec], parsed_form_spec)
+    @form_spec = FormSpec.new(:form_id => params[:form_id], :spec => form_spec, :parsed_spec => parsed_form_spec)
 
     if @form_spec.save
       render json: @form_spec, status: :created
@@ -31,9 +31,9 @@ class Api::V1::FormSpecsController < ApplicationController
   # PATCH/PUT /forms/#{form_id}/specs/1
   def update
     form_spec_params
-    form_parsed_spec = {}
-    content = FormSpecParseService.parse_spec(params[:form_spec][:content], form_parsed_spec)
-    if @form_spec.update(:form_id => params[:form_id], :content => content)
+    parsed_form_spec = {}
+    form_spec = FormSpecParseService.parse_spec(params[:form_spec][:spec], parsed_form_spec)
+    if @form_spec.update(:form_id => params[:form_id], :spec => form_spec, :parsed_spec => parsed_form_spec)
       render json: @form_spec
     else
       render json: @form_spec.errors, status: :unprocessable_entity
@@ -53,7 +53,7 @@ class Api::V1::FormSpecsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def form_spec_params
-      params.require(:form_spec).require(:content).inspect
+      params.require(:form_spec).require(:spec).inspect
     end
 
     # Check if params exist

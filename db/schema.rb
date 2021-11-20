@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2021_11_20_122327) do
 
   create_table "form_specs", force: :cascade do |t|
     t.integer "form_id", null: false
-    t.json "content"
+    t.json "spec"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.json "parsed_spec"

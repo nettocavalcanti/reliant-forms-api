@@ -5,7 +5,7 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
     @form_spec_value = form_spec_values(:one)
     @form_spec_id = @form_spec_value.form_spec_id
     @form_id = 1
-    @form_spec_content = {
+    @form_spec_spec = {
       "key": {
         "type": "text",
         "mutable": false,
@@ -25,10 +25,10 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
       FormSpec.create(
         :id => @form_spec_id,
         :form_id => @form_id,
-        :content => @form_spec_content
+        :spec => @form_spec_spec
       )
     else
-      @form_spec.content = @form_spec_content
+      @form_spec.spec = @form_spec_spec
       @form_spec.save
     end
   end

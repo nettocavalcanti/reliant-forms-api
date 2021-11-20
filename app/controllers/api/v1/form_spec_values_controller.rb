@@ -17,7 +17,7 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # POST /forms/#{form_id}/specs/#{form_spec_id}/values
   def create
     form_spec_value_params
-    FormSpecValueValidateService::validate(@form_spec.content, params[:form_spec_value][:value])
+    FormSpecValueValidateService::validate(@form_spec.spec, params[:form_spec_value][:value])
     @form_spec_value = FormSpecValue.new(:form_spec_id => params[:form_spec_id], :value => params[:form_spec_value][:value])
 
     if @form_spec_value.save
