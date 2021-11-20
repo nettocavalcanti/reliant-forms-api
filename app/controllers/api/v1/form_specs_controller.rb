@@ -2,19 +2,19 @@ class Api::V1::FormSpecsController < ApplicationController
   before_action :set_form_spec, only: [:show, :update, :destroy]
   before_action :check_form
 
-  # GET /form_specs
+  # GET /forms/#{form_id}/specs
   def index
     @form_specs = FormSpec.where(:form_id => params[:form_id]).paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC')
 
     render json: @form_specs
   end
 
-  # GET /form_specs/1
+  # GET /forms/#{form_id}/specs/1
   def show
     render json: @form_spec
   end
 
-  # POST /form_specs
+  # POST /forms/#{form_id}/specs
   def create
     form_spec_params
     content = FormSpecParseService.parse_spec(params[:form_spec][:content])
@@ -27,7 +27,7 @@ class Api::V1::FormSpecsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /form_specs/1
+  # PATCH/PUT /forms/#{form_id}/specs/1
   def update
     form_spec_params
     content = FormSpecParseService.parse_spec(params[:form_spec][:content])
@@ -38,7 +38,7 @@ class Api::V1::FormSpecsController < ApplicationController
     end
   end
 
-  # DELETE /form_specs/1
+  # DELETE /forms/#{form_id}/specs/1
   def destroy
     @form_spec.destroy
   end

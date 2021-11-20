@@ -2,19 +2,19 @@ class Api::V1::FormSpecValuesController < ApplicationController
   before_action :set_form_spec_value, only: [:show, :update, :destroy]
   before_action :check_form_spec
 
-  # GET /form_spec_values
+  # GET /forms/#{form_id}/specs/#{form_spec_id}/values
   def index
     @form_spec_values = FormSpecValue.where(:form_spec_id => params[:form_spec_id]).paginate(page: params[:page] || 1, per_page: 20)
 
     render json: @form_spec_values
   end
 
-  # GET /form_spec_values/1
+  # GET /forms/#{form_id}/specs/#{form_spec_id}/values/1
   def show
     render json: @form_spec_value
   end
 
-  # POST /form_spec_values
+  # POST /forms/#{form_id}/specs/#{form_spec_id}/values
   def create
     form_spec_value_params
     FormSpecValueValidateService::validate(@form_spec.content, params[:form_spec_value][:value])
@@ -27,7 +27,7 @@ class Api::V1::FormSpecValuesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /form_spec_values/1
+  # PATCH/PUT /forms/#{form_id}/specs/#{form_spec_id}/values/1
   def update
     form_spec_value_params
     if @form_spec_value.update(:value => params[:form_spec_value][:value])
@@ -37,7 +37,7 @@ class Api::V1::FormSpecValuesController < ApplicationController
     end
   end
 
-  # DELETE /form_spec_values/1
+  # DELETE /forms/#{form_id}/specs/#{form_spec_id}/values/1
   def destroy
     @form_spec_value.destroy
   end
