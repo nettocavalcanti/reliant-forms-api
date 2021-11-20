@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_235809) do
+ActiveRecord::Schema.define(version: 2021_11_20_122327) do
 
   create_table "form_spec_values", force: :cascade do |t|
     t.integer "form_spec_id", null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_235809) do
     t.json "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "parsed_spec"
     t.index ["form_id"], name: "index_form_specs_on_form_id"
   end
 

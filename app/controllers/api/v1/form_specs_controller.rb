@@ -17,7 +17,8 @@ class Api::V1::FormSpecsController < ApplicationController
   # POST /forms/#{form_id}/specs
   def create
     form_spec_params
-    content = FormSpecParseService.parse_spec(params[:form_spec][:content])
+    form_parsed_spec = {}
+    content = FormSpecParseService.parse_spec(params[:form_spec][:content], form_parsed_spec)
     @form_spec = FormSpec.new(:form_id => params[:form_id], :content => content)
 
     if @form_spec.save
@@ -30,7 +31,8 @@ class Api::V1::FormSpecsController < ApplicationController
   # PATCH/PUT /forms/#{form_id}/specs/1
   def update
     form_spec_params
-    content = FormSpecParseService.parse_spec(params[:form_spec][:content])
+    form_parsed_spec = {}
+    content = FormSpecParseService.parse_spec(params[:form_spec][:content], form_parsed_spec)
     if @form_spec.update(:form_id => params[:form_id], :content => content)
       render json: @form_spec
     else
