@@ -5,8 +5,32 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
     @form_spec_value = form_spec_values(:one)
     @form_spec_id = @form_spec_value.form_spec_id
     @form_id = 1
+    @form_spec_content = {
+      "key": {
+        "type": "text",
+        "mutable": false,
+        "default": "static_key1"
+      },
+      "value": {
+        "type": "text",
+        "mutable": true
+      }
+    }
 
-    Form.create(:name => "Form", :id => @form_id)
+    random_name = (0...8).map { (65 + rand(26)).chr }.join
+
+    Form.create(:name => "Form_#{random_name}", :id => @form_id)
+    @form_spec = FormSpec.find_by_id(@form_spec_id)
+    if @form_spec.nil?
+      FormSpec.create(
+        :id => @form_spec_id,
+        :form_id => @form_id,
+        :content => @form_spec_content
+      )
+    else
+      @form_spec.content = @form_spec_content
+      @form_spec.save
+    end
   end
 
   test "should get index" do

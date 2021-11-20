@@ -20,6 +20,13 @@ class ApplicationController < ActionController::API
         render json: response, status: :bad_request
     end
 
+    rescue_from(FormSpecValueValidateService::InvalidFormSpecValueError) do |format_error|
+        error = {}
+        error["message"] = [format_error]
+        response = { errors: [error] }
+        render json: response, status: :bad_request
+    end
+
     rescue_from(ActiveRecord::RecordNotUnique) do
         error = {}
         error["message"] = ["There's already an object with the same key in Database"]

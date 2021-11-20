@@ -17,6 +17,7 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # POST /form_spec_values
   def create
     form_spec_value_params
+    FormSpecValueValidateService::validate(@form_spec.content, params[:form_spec_value][:value])
     @form_spec_value = FormSpecValue.new(:form_spec_id => params[:form_spec_id], :value => params[:form_spec_value][:value])
 
     if @form_spec_value.save
@@ -56,6 +57,6 @@ class Api::V1::FormSpecValuesController < ApplicationController
       params.require(:form_id).inspect
       params.require(:form_spec_id).inspect
       Form.find(params[:form_id])
-      FormSpec.find(params[:form_spec_id])
+      @form_spec = FormSpec.find(params[:form_spec_id])
     end
 end

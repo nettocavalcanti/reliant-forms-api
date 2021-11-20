@@ -33,7 +33,6 @@ class FormSpecParseService
     def self.parse_specs(form_specs)
         json_form_specs = JSON.parse(form_specs)
         raise InvalidFormSpecError.new("JSON FormSpec must be an array") unless json_form_specs.is_a?(Array)
-
         json_form_specs.each do |form_spec|
             parse_spec(form_spec)
         end
@@ -44,6 +43,7 @@ class FormSpecParseService
     private
 
     def self.validate_form_spec(form_spec, level)
+        form_spec.deep_stringify_keys!
         # Parse Schema compliance
         raise InvalidFormSpecError.new("FormSpec must be an object but found '#{form_spec}'") unless form_spec.is_a?(Object)
         raise InvalidFormSpecError.new("FormSpec not fulfill the specifications") unless JSON::Validator.validate(KeyValuePairDefinition, form_spec)
