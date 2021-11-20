@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  
   namespace :api do
     namespace :v1 do
       resources :forms do
-        resources :form_specs
+        resources :form_specs, path: 'specs' do
+          resources :form_spec_values, path: 'values'
+        end
       end
     end
   end

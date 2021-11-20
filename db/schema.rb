@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_223235) do
+ActiveRecord::Schema.define(version: 2021_11_19_235809) do
+
+  create_table "form_spec_values", force: :cascade do |t|
+    t.integer "form_spec_id", null: false
+    t.string "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["form_spec_id"], name: "index_form_spec_values_on_form_spec_id"
+  end
 
   create_table "form_specs", force: :cascade do |t|
     t.integer "form_id", null: false
@@ -27,5 +35,6 @@ ActiveRecord::Schema.define(version: 2021_11_18_223235) do
     t.index ["name"], name: "index_forms_on_name", unique: true
   end
 
+  add_foreign_key "form_spec_values", "form_specs"
   add_foreign_key "form_specs", "forms"
 end
