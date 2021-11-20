@@ -22,13 +22,22 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
     Form.create(:name => "Form_#{random_name}", :id => @form_id)
     @form_spec = FormSpec.find_by_id(@form_spec_id)
     if @form_spec.nil?
-      FormSpec.create(
+      @form_spec = FormSpec.create(
         :id => @form_spec_id,
         :form_id => @form_id,
         :spec => @form_spec_spec
       )
+      
+      parsed_spec = {}
+      FormSpecParseService::parse_spec(@form_spec.spec, parsed_spec)
+
+      @form_spec.parsed_spec = parsed_spec
+      @form_spec.save
     else
       @form_spec.spec = @form_spec_spec
+      parsed_spec = {}
+      FormSpecParseService::parse_spec(@form_spec.spec, parsed_spec)
+      @form_spec.parsed_spec = parsed_spec
       @form_spec.save
     end
   end
@@ -40,7 +49,7 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create form_spec_value" do
     assert_difference('FormSpecValue.count') do
-      post "/api/v1/forms/#{@form_id}/specs/#{@form_spec_id}/values", params: { form_spec_value: { value: @form_spec_value.value } }, as: :json
+      post "/api/v1/forms/#{@form_id}/specs/#{@form_spec_id}/values", params: { form_spec_value: { value: @form_spec_value.value, :key => "static_key1" } }, as: :json
     end
 
     assert_response 201
@@ -52,7 +61,7 @@ class Api::V1::FormSpecValuesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update form_spec_value" do
-    patch "/api/v1/forms/#{@form_id}/specs/#{@form_spec_id}/values/#{@form_spec_value.id}", params: { form_spec_value: { value: @form_spec_value.value } }, as: :json
+    patch "/api/v1/forms/#{@form_id}/specs/#{@form_spec_id}/values/#{@form_spec_value.id}", params: { form_spec_value: { value: @form_spec_value.value, :key => "static_key1" } }, as: :json
     assert_response 200
   end
 

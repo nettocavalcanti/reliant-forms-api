@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_20_122327) do
+ActiveRecord::Schema.define(version: 2021_11_20_140417) do
 
   create_table "form_spec_values", force: :cascade do |t|
     t.integer "form_spec_id", null: false
     t.string "value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "key"
+    t.index ["form_spec_id", "key"], name: "index_form_spec_values_on_form_spec_id_and_key", unique: true
     t.index ["form_spec_id"], name: "index_form_spec_values_on_form_spec_id"
   end
 

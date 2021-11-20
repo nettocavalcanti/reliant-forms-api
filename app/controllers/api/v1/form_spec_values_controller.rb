@@ -17,8 +17,9 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # POST /forms/#{form_id}/specs/#{form_spec_id}/values
   def create
     form_spec_value_params
+    FormSpecValueValidateService::validate_key(@form_spec.parsed_spec, params[:form_spec_value][:key])
     FormSpecValueValidateService::validate(@form_spec.spec, params[:form_spec_value][:value])
-    @form_spec_value = FormSpecValue.new(:form_spec_id => params[:form_spec_id], :value => params[:form_spec_value][:value])
+    @form_spec_value = FormSpecValue.new(:form_spec_id => params[:form_spec_id], :value => params[:form_spec_value][:value], :key => params[:form_spec_value][:key])
 
     if @form_spec_value.save
       render json: @form_spec_value, status: :created
@@ -30,6 +31,8 @@ class Api::V1::FormSpecValuesController < ApplicationController
   # PATCH/PUT /forms/#{form_id}/specs/#{form_spec_id}/values/1
   def update
     form_spec_value_params
+    FormSpecValueValidateService::validate_key(@form_spec.parsed_spec, params[:form_spec_value][:key])
+    FormSpecValueValidateService::validate(@form_spec.spec, params[:form_spec_value][:value])
     if @form_spec_value.update(:value => params[:form_spec_value][:value])
       render json: @form_spec_value
     else
@@ -51,6 +54,7 @@ class Api::V1::FormSpecValuesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def form_spec_value_params
       params.require(:form_spec_value).require(:value).inspect
+      params.require(:form_spec_value).require(:key).inspect
     end
 
     def check_form_spec
