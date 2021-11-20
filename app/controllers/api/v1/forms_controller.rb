@@ -3,7 +3,7 @@ class Api::V1::FormsController < ApplicationController
 
   # GET /forms
   def index
-    @forms = Form.paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC').map {|form| {:id => form.id, :name => form.name, :specs => form.form_specs.count}}
+    @forms = Form.paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC')
 
     render json: @forms
   end

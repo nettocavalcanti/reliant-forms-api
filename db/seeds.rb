@@ -5,3 +5,24 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+[
+    {name: "Form1"},
+    {name: "Form2"}
+].each do |form|
+    Form.find_or_create_by({name: form[:name]})
+end
+
+[
+    {
+        form_id: Form.first.id,
+        spec: {"key":{"type":"text","mutable":false,"default":"static_key"},"value":{"type":"text","mutable":true}},
+        parsed_spec: {"static_key": "<value>"}
+    },
+    {
+        form_id: Form.second.id,
+        spec: {"key":{"type":"text","mutable":true,"multiple":true,"default":"environment_1"},"value":{"type":"child"},"children":[{"key":{"type":"text","mutable":false,"default":"database"},"value":{"type":"text","mutable":true}},{"key":{"type":"text","mutable":false,"default":"username"},"value":{"type":"text","mutable":true}}]},
+        parsed_spec: {"<environment_1>": {"database": "<database>", "username": "<username>"}}
+    },
+].each do |form_spec|
+    FormSpec.find_or_create_by({form_id: form_spec[:form_id], spec: form_spec[:spec], parsed_spec: form_spec[:parsed_spec]})
+end
