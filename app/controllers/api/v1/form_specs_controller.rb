@@ -28,13 +28,32 @@ class Api::V1::FormSpecsController < ApplicationController
   def create
     form_spec_params
     parsed_form_spec = {}
-    form_spec = FormSpecParseService.parse_spec(params[:form_spec][:spec], parsed_form_spec)
-    @form_spec = FormSpec.new(:form_id => params[:form_id], :spec => form_spec, :parsed_spec => parsed_form_spec)
-
-    if @form_spec.save
-      render json: @form_spec, status: :created
+    json_spec = JSON.parse(params[:form_spec][:spec])
+    if (json_spec.is_a?(Array))
+        form_specs = []
+        @form_specs = []
+        parsed_form_specs = []
+        json_spec.each do |spec|
+            parsed_form_spec = {}
+            form_specs.push(FormSpecParseService.parse_spec(spec, parsed_form_spec))
+            parsed_form_specs.push(parsed_form_spec)
+        end
+        
+        form_specs.each_with_index do |form_spec, index|
+            @form_spec = FormSpec.new(:form_id => params[:form_id], :spec => form_spec, :parsed_spec => parsed_form_specs[index])
+            @form_specs.push(@form_spec.save)
+        end
+        
+        render json: @form_specs, status: :created
     else
-      render json: @form_spec.errors, status: :unprocessable_entity
+        form_spec = FormSpecParseService.parse_spec(params[:form_spec][:spec], parsed_form_spec)
+        @form_spec = FormSpec.new(:form_id => params[:form_id], :spec => form_spec, :parsed_spec => parsed_form_spec)
+
+        if @form_spec.save
+          render json: @form_spec, status: :created
+        else
+          render json: @form_spec.errors, status: :unprocessable_entity
+        end
     end
   end
 
