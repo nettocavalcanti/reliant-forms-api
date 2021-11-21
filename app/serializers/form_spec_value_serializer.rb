@@ -1,3 +1,3 @@
 class FormSpecValueSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :key, :value
 end

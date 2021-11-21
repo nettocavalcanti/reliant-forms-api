@@ -1,5 +1,5 @@
 class Api::V1::FormSpecsController < ApplicationController
-  before_action :set_form_spec, only: [:show, :update, :destroy]
+  before_action :set_form_spec, only: [:show, :update, :destroy, :keys]
   before_action :check_form
 
   # GET /forms/#{form_id}/specs
@@ -10,6 +10,16 @@ class Api::V1::FormSpecsController < ApplicationController
   end
 
   # GET /forms/#{form_id}/specs/1
+  def show
+    render json: @form_spec
+  end
+  
+  # GET /forms/#{form_id}/specs/1/keys
+  def keys
+    render json: {keys: FormSpecValueValidateService::convert_into_keys(@form_spec.parsed_spec)}
+  end
+  
+  # GET /forms/#{form_id}/specs/1/keys
   def show
     render json: @form_spec
   end
@@ -48,7 +58,7 @@ class Api::V1::FormSpecsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_form_spec
-      @form_spec = FormSpec.find(params[:id])
+      @form_spec = FormSpec.find(params[:id] || params[:form_spec_id])
     end
 
     # Only allow a list of trusted parameters through.

@@ -39,6 +39,16 @@ class FormSpecValueValidateService
         raise InvalidFormSpecValueError.new("Value must be an integer") if (form_spec["value"]["type"] == "integer") and (!is_number?(value))
         raise InvalidFormSpecValueError.new("Field is not mutable") if form_spec["value"]["mutable"] == false
     end
+    
+    def self.convert_into_keys(form_spec)
+        keys = []
+        form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.each do |spec_key|
+            parsed_spec_key = spec_key.gsub(":text", "").gsub(":integer", "").tr("<>", "").split(":")[0]
+            keys.push({key: parsed_spec_key, value: spec_key})
+        end
+        
+        return keys
+    end
 
     private
 
