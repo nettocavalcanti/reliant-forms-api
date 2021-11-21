@@ -4,7 +4,7 @@ class Api::V1::FormSpecsController < ApplicationController
 
   # GET /forms/#{form_id}/specs
   def index
-    @form_specs = FormSpec.where(:form_id => params[:form_id]).paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC')
+    @form_specs = FormSpec.where(:form_id => params[:form_id]).paginate(page: page_param, per_page: per_page_param).order('created_at DESC')
 
     render json: @form_specs
   end

@@ -1,4 +1,14 @@
 class ApplicationController < ActionController::API
+    private
+    
+    def page_param
+        params[:page].nil? ? 1 : params[:page].to_i + 1
+    end
+    
+    def per_page_param
+        params[:per_page].nil? ? 5 : params[:per_page].to_i
+    end
+
     rescue_from(ActionController::ParameterMissing) do |parameter_missing_exception|
         error = {}
         error[parameter_missing_exception.param] = ['parameter is required']

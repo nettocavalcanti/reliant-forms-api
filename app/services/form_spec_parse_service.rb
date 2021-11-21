@@ -29,6 +29,8 @@ class FormSpecParseService
     def self.parse_spec(form_spec, parsed_spec)
         form_spec = JSON.parse(form_spec) if form_spec.is_a?(String)
         validate_form_spec(form_spec, parsed_spec, CHILDREN_STARTING_LEVEL)
+        
+        return form_spec
     end
 
     def self.parse_specs(form_specs, parsed_specs = {})

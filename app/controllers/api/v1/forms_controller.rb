@@ -3,14 +3,14 @@ class Api::V1::FormsController < ApplicationController
 
   # GET /forms
   def index
-    @forms = Form.paginate(page: params[:page] || 1, per_page: 20).order('created_at DESC')
+    @forms = Form.paginate(page: page_param, per_page: per_page_param).order('created_at DESC')
 
     render json: @forms
   end
 
   # GET /forms/1
   def show
-    render json: @form
+    render json: {:id => @form.id, :name => @form.name, :created_at => @form.created_at, :form_specs_count => @form.form_specs.size}
   end
 
   # POST /forms
@@ -49,5 +49,5 @@ class Api::V1::FormsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def form_params
       params.require(:form).require(:name).inspect
-    end
+    end    
 end
