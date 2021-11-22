@@ -89,3 +89,59 @@ This model keeps the values for all inputable fields of the `JSON` spec. It brin
 ```
 
 This helps to associate a unique value to that key on the `JSON` spec.
+
+# Services
+
+## FormSpecParseService
+
+This service helps to check the `JSON` `schema` for the incomming requests. It has, basically, two main validations: Check shcema and Validate schema values.
+
+### Check Schema
+
+Just validate if the incomming `JSON` corresponds to the schema proposed by the test and converts the input in a `JSON` content, if it's in `String` format.
+
+### Validate Schema Values
+
+* type == "child" is not allowed on keys.
+* If type == "child", "mutable" and "default" fields have no mean and can be ignored.
+* To make things simpler, if type == "child", consider "multiple" always false for the value.
+* Any entry with "mutable" == false and "multiple" == true is an error.
+* **children can have children.**
+* "multiple" field is default to false.
+* Entries with "mutable" == false must have a non empty "default" field.
+* Only one entry with mutable key must exists on a YAML "level", e.g. this YAML spec is impossible to write and considered invalid:
+
+The **bold** item above have a custom validation wich not allows more than 3 `children` nesteds.
+
+## FormSpecValueValidateService
+
+This helper service validates if the inputed value is allowed to the key that references to a `JSON` spec and ensures:
+
+* The input has the right type (`text` or `integer`)
+* The input is allowed to fill the desired spec key
+
+# Serializers
+
+## FormSerializer
+
+This serializer simply helps to count how many `form_specs` it has.
+
+## FormSpecSerializer
+
+Creates a calculated attribute to list all `keys` in this `form_spec`.
+
+## FormSpecValueSerializer
+
+Just the default fields of the model: `id`, `key` and `value`.
+
+
+# Custom Helper Endpoint
+
+## GET /forms/:form_id/all_data
+
+This endpoint fetch all `specs` and `spec_values` of the current `Form` allowing to return the `Form` detail, `specs`, `parsed_specs`, `form_spec_values.keys` and `form_spec_values.values` at once. This helps fulfill the `YAML` preview of the form and helps to fulfill the HTML form that allows the user to set any of the values for the `Form`.
+
+## POST /forms/:form_id/all_data
+
+This endpoint receives all `specs` and `form_spec_values` set for the user in frontend side. Here I just parse all the data calling the `update` or `create` business for `FormSpecValue`.
+
