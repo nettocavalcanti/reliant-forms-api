@@ -36,15 +36,17 @@ class FormSpecValueValidateService
     def self.validate(form_spec, parsed_spec, value, key)
         form_spec.deep_stringify_keys!
         validate_key(parsed_spec, key, value)
-        raise InvalidFormSpecValueError.new("Value must be an integer") if (form_spec["value"]["type"] == "integer") and (!is_number?(value))
-        raise InvalidFormSpecValueError.new("Field is not mutable") if form_spec["value"]["mutable"] == false
+        raise InvalidFormSpecValueError.new("Value for key #{key} must be an integer") if (form_spec["value"]["type"] == "integer") and (!is_number?(value))
+        raise InvalidFormSpecValueError.new("Field #{key} is imutable") if form_spec["value"]["mutable"] == false
     end
     
     def self.convert_into_keys(form_spec)
         keys = []
-        form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.each do |spec_key|
-            parsed_spec_key = spec_key.gsub(":text", "").gsub(":integer", "").tr("<>", "").split(":")[0]
-            keys.push({key: parsed_spec_key, value: spec_key})
+        if form_spec.present?
+            form_spec.flatten_with_path.reject{|k, v| v == NOT_ALLOW_INPUT_TEXT}.keys.each do |spec_key|
+                parsed_spec_key = spec_key.gsub(":text", "").gsub(":integer", "").tr("<>", "").split(":")[0]
+                keys.push({key: parsed_spec_key, value: spec_key})
+            end
         end
         
         return keys
@@ -61,13 +63,13 @@ class FormSpecValueValidateService
             if spec_key.gsub(":text", "").gsub(":integer", "") == key
                 spec_type = spec_key.tr("<>", "").split(":")[1]
                 found_key = true
-                raise InvalidFormSpecValueError.new("Value must be an integer") if (spec_type == "integer") and !is_number?(value)
+                raise InvalidFormSpecValueError.new("Value for key #{key} must be an integer") if (spec_type == "integer") and !is_number?(value)
                 break
             end
         end
 
         # If key not found on spec
-        raise InvalidFormSpecValueError.new("Value not allowed in this field") unless found_key
+        raise InvalidFormSpecValueError.new("Value not allowed in the key #{key}") unless found_key
     end
 
     private

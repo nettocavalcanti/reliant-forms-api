@@ -23,7 +23,7 @@ class FormSpecValueValidateServiceTest < ActiveSupport::TestCase
                 "static_key1"
             )
         }
-        assert_equal( "Value must be an integer", exception.message )
+        assert_equal( "Value for key static_key1 must be an integer", exception.message )
     end
 
     test "should allow Integer when int type in value key" do
@@ -74,6 +74,6 @@ class FormSpecValueValidateServiceTest < ActiveSupport::TestCase
             )
         }
 
-        assert_equal( "Value not allowed in this field", exception.message )
+        assert_equal( "Value not allowed in the key <environment_1>/database", exception.message )
     end
 end

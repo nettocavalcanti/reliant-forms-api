@@ -4,8 +4,10 @@ one:
   form_spec: one
   value: MyString
   form_spec_id: 1
+  key: static_key1
 
 two:
   form_spec: two
   value: MyString
   form_spec_id: 2
+  key: static_key1

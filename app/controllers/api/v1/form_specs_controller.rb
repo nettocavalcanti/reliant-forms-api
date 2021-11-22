@@ -19,7 +19,7 @@ class Api::V1::FormSpecsController < ApplicationController
     render json: {keys: FormSpecValueValidateService::convert_into_keys(@form_spec.parsed_spec)}
   end
   
-  # GET /forms/#{form_id}/specs/1/keys
+  # GET /forms/#{form_id}/specs/1
   def show
     render json: @form_spec
   end
