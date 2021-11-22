@@ -1,11 +1,11 @@
 # README
 
-This is a Rails API application for appliance to Reliant test. The main goal to this API is to built endpoints for each `Resource` of the application with a few custom `Services`, `Serializers` and `Endpoints`. To understand the `Resources` relationship look the Entity Relationship Diagram below:
+This is a Rails API application to submit to Reliant test. The main goal to this API is to built endpoints for each `Resource` of the application with a few custom `Services`, `Serializers` and `Endpoints`. To understand the `Resources` relationship look the Entity Relationship Diagram below:
 
 ![entity-relationship-diagram drawio](https://user-images.githubusercontent.com/10437444/142891888-d58a04c1-9143-402c-a904-e7bd0568ff66.png)
 
 This API was built using:
-* Ruby version 6.1.4.1 on a dockerized container for development purpouse only
+* Ruby version 6.1.4.1 on a dockerized container for development purpose only
 * Uses SQLite3 as Test database
 * Uses SQLitte3 as Development database
 
@@ -20,7 +20,7 @@ $> rails test
 ```
 
 # Starting server
-* **For integration purpouses with the Frontend keep the server running on port 3001**
+* **For integration purposes with the Frontend keep the server running on port 3001**
 
 To run the server, see the requirements for the right Rails version. After downloading the source code and have the requirements just run the comands:
 ```shell
