@@ -147,6 +147,7 @@ This endpoint receives all `specs` and `form_spec_values` set for the user in fr
 
 # What is missing
 
+* Implement Postgres integration
 * Improve code for GET all_data and POST all_data.
 * Implement validation rules to avoid saving YAML keys with same `key` in `FormSpecs`.
 * Implement validation rules to avoid saving YAML values for keys at same level. For example, the bellow `YAML` code has two identical values (`value_1`) on the same level:
