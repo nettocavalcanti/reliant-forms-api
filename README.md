@@ -145,3 +145,18 @@ This endpoint fetch all `specs` and `spec_values` of the current `Form` allowing
 
 This endpoint receives all `specs` and `form_spec_values` set for the user in frontend side. Here I just parse all the data calling the `update` or `create` business for `FormSpecValue`.
 
+# What is missing
+
+* Improve code for GET all_data and POST all_data.
+* Implement validation rules to avoid saving YAML keys with same `key` in `FormSpecs`.
+* Implement validation rules to avoid saving YAML values for keys at same level. For example, the bellow `YAML` code has two identical values (`value_1`) on the same level:
+```yml
+value_1:
+  content: <value>
+  content2: <value>
+value_1:
+  content3: <value>
+  content4: <value>
+```
+* Implement levels in `FormSpecs` and `FormSpecValues` to make it easier to search for the above rules.
+* Implement more tests... A lot of them.
